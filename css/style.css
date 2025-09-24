@@ -1,0 +1,79 @@
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --success-color: #27ae60;
+    --earthquake-color: #ff6b6b;
+    --flood-color: #3498db;
+    --wildfire-color: #e67e22;
+    --storm-color: #9b59b6;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+#map {
+    height: 60vh;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    min-height: 100vh;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.disaster-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.disaster-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.earthquake { border-left: 4px solid var(--earthquake-color); }
+.flood { border-left: 4px solid var(--flood-color); }
+.wildfire { border-left: 4px solid var(--wildfire-color); }
+.storm { border-left: 4px solid var(--storm-color); }
+
+.severity-low { border-bottom: 3px solid var(--success-color); }
+.severity-medium { border-bottom: 3px solid var(--warning-color); }
+.severity-high { border-bottom: 3px solid var(--danger-color); }
+.severity-critical { border-bottom: 3px solid #c0392b; }
+
+.map-marker {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.alert-badge {
+    font-size: 0.8em;
+    padding: 0.25em 0.6em;
+    border-radius: 10px;
+    font-weight: bold;
+}

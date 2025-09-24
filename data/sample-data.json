@@ -1,0 +1,40 @@
+{
+    "disasters": [
+        {
+            "id": "1",
+            "title": "Earthquake - California",
+            "type": "earthquake",
+            "severity": "high",
+            "magnitude": 5.8,
+            "location": { "lat": 34.0522, "lng": -118.2437 },
+            "description": "Moderate earthquake reported in Los Angeles area",
+            "timestamp": "2024-01-15T10:30:00Z",
+            "affectedAreas": ["Los Angeles", "Santa Monica"],
+            "source": "USGS"
+        },
+        {
+            "id": "2",
+            "title": "Wildfire - Australia",
+            "type": "wildfire",
+            "severity": "critical",
+            "area": "1500 hectares",
+            "location": { "lat": -33.8688, "lng": 151.2093 },
+            "description": "Large bushfire spreading rapidly in Sydney outskirts",
+            "timestamp": "2024-01-15T08:15:00Z",
+            "affectedAreas": ["Sydney", "Blue Mountains"],
+            "source": "NASA EONET"
+        },
+        {
+            "id": "3",
+            "title": "Flood Warning - India",
+            "type": "flood",
+            "severity": "medium",
+            "waterLevel": "3.2m",
+            "location": { "lat": 28.6139, "lng": 77.2090 },
+            "description": "Heavy monsoon rains causing flooding in Delhi region",
+            "timestamp": "2024-01-15T05:45:00Z",
+            "affectedAreas": ["Delhi", "Noida"],
+            "source": "ReliefWeb"
+        }
+    ]
+}
