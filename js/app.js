@@ -1,91 +1,144 @@
+// Main Application Logic
+const App = {
+  refreshInterval: 30000, // Refresh every 30 seconds
+  autoRefreshTimer: null,
 
+  /**
+   * Initialize the application
+   */
+  async init() {
+    try {
+      UI.showLoading();
+      
+      // Initialize map
+      MapHandler.init('map');
 
-class DisasterApp {
-    constructor() {
-        this.disasters = [];
-        this.map = null;
-        this.filters = {
-            type: 'all',
-            severity: 'all'
-        };
-        
-        this.api = disasterAPI; 
-        
-        this.init();
+      // Load initial data
+      await this.loadData();
+
+      // Setup event listeners
+      this.setupEventListeners();
+
+      // Start auto-refresh
+      this.startAutoRefresh();
+
+      UI.showNotification('Dashboard loaded successfully', 'success');
+    } catch (error) {
+      console.error('Error initializing app:', error);
+      UI.showNotification('Error loading dashboard', 'error');
     }
+  },
+
+  /**
+   * Load data from API
+   */
+  async loadData() {
+    const data = await API.fetchData();
     
-    async init() {
-        console.log('🚀 Disaster Management App Initializing...');
-        
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                this.startApp();
-            });
+    const disasters = data.disasters || [];
+    const safeZones = data.safeZones || [];
+
+    // Update map
+    MapHandler.addDisasters(disasters);
+    MapHandler.addSafeZones(safeZones);
+
+    // Update UI
+    UI.displayAlerts(disasters);
+    UI.displaySafeZones(safeZones);
+    UI.displayStats(disasters, safeZones);
+    UI.displayFilters(disasters);
+  },
+
+  /**
+   * Setup event listeners
+   */
+  setupEventListeners() {
+    // Manual refresh button
+    const refreshBtn = document.getElementById('refresh-btn');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => {
+        this.loadData();
+        UI.showNotification('Data refreshed', 'info');
+      });
+    }
+
+    // Auto-refresh toggle
+    const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+    if (autoRefreshToggle) {
+      autoRefreshToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          this.startAutoRefresh();
+          UI.showNotification('Auto-refresh enabled', 'info');
         } else {
-            this.startApp();
+          this.stopAutoRefresh();
+          UI.showNotification('Auto-refresh disabled', 'info');
         }
+      });
     }
-    
-    async startApp() {
-        try {
-            await this.initializeMap();
-            await this.loadDisasterData();
-            this.setupEventListeners();
-            this.updateUI();
-            
-            console.log('✅ App initialized successfully!');
-        } catch (error) {
-            console.error('❌ Error initializing app:', error);
-        }
-    }
-    
-    async initializeMap() {
-        
-        console.log('🗺️ Initializing map...');
-       
-    }
-    
-    async loadDisasterData() {
-        console.log('📊 Loading disaster data...');
-        this.disasters = await this.api.fetchDisasters();
-        console.log(`✅ Loaded ${this.disasters.length} disaster events`);
-    }
-    
-    setupEventListeners() {
-       
-        console.log('🎯 Setting up event listeners...');
-        
-        
-        const refreshBtn = document.createElement('button');
-        refreshBtn.textContent = 'Refresh Data';
-        refreshBtn.className = 'btn btn-primary btn-sm';
-        refreshBtn.onclick = () => this.refreshData();
-        
-       
-        const navbar = document.querySelector('.navbar-nav');
-        const listItem = document.createElement('li');
-        listItem.className = 'nav-item';
-        listItem.appendChild(refreshBtn);
-        navbar.appendChild(listItem);
-    }
-    
-    async refreshData() {
-        console.log('🔄 Refreshing disaster data...');
-        await this.loadDisasterData();
-        this.updateUI();
-    }
-    
-    updateUI() {
-        
-        console.log('🎨 Updating UI with', this.disasters.length, 'events');
-        
-        
-        updateDisasterCards(this.disasters);
-    }
-}
 
+    // Search/filter by location
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.searchLocations(e.target.value);
+      });
+    }
+  },
 
-window.addEventListener('load', () => {
-    window.disasterApp = new DisasterApp();
+  /**
+   * Start auto-refresh
+   */
+  startAutoRefresh() {
+    if (this.autoRefreshTimer) return;
+    
+    this.autoRefreshTimer = setInterval(async () => {
+      await this.loadData();
+    }, this.refreshInterval);
+  },
+
+  /**
+   * Stop auto-refresh
+   */
+  stopAutoRefresh() {
+    if (this.autoRefreshTimer) {
+      clearInterval(this.autoRefreshTimer);
+      this.autoRefreshTimer = null;
+    }
+  },
+
+  /**
+   * Search locations
+   */
+  async searchLocations(query) {
+    if (!query) {
+      await this.loadData();
+      return;
+    }
+
+    const data = await API.fetchData();
+    const disasters = data.disasters || [];
+    const safeZones = data.safeZones || [];
+
+    const queryLower = query.toLowerCase();
+
+    const filteredDisasters = disasters.filter(d =>
+      d.location.toLowerCase().includes(queryLower) ||
+      d.type.toLowerCase().includes(queryLower)
+    );
+
+    const filteredSafeZones = safeZones.filter(z =>
+      z.name.toLowerCase().includes(queryLower) ||
+      z.type.toLowerCase().includes(queryLower) ||
+      z.address.toLowerCase().includes(queryLower)
+    );
+
+    // Update UI
+    UI.displayAlerts(filteredDisasters);
+    UI.displaySafeZones(filteredSafeZones);
+  }
+};
+
+// Initialize app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
 });
