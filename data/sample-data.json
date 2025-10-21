@@ -8,7 +8,7 @@
       "lng": -74.0060,
       "location": "New York City",
       "description": "Moderate earthquake detected",
-      "radius": 2000,
+      "radius": 5000,
       "timestamp": "2025-10-20T10:30:00Z"
     },
     {
@@ -19,7 +19,7 @@
       "lng": -118.2437,
       "location": "Los Angeles",
       "description": "Heavy rainfall causing floods",
-      "radius": 1500,
+      "radius": 3000,
       "timestamp": "2025-10-20T09:15:00Z"
     },
     {
@@ -30,8 +30,41 @@
       "lng": -87.6298,
       "location": "Chicago",
       "description": "Severe thunderstorm warning",
-      "radius": 1000,
+      "radius": 2000,
       "timestamp": "2025-10-20T11:00:00Z"
+    },
+    {
+      "id": 4,
+      "type": "wildfire",
+      "severity": 8,
+      "lat": 34.1561,
+      "lng": -118.0931,
+      "location": "Monrovia, CA",
+      "description": "Large wildfire spreading rapidly",
+      "radius": 8000,
+      "timestamp": "2025-10-20T14:00:00Z"
+    },
+    {
+      "id": 5,
+      "type": "tornado",
+      "severity": 9,
+      "lat": 35.2226,
+      "lng": -97.4395,
+      "location": "Moore, OK",
+      "description": "Large and destructive tornado on the ground",
+      "radius": 6000,
+      "timestamp": "2025-10-20T15:30:00Z"
+    },
+    {
+      "id": 6,
+      "type": "hurricane",
+      "severity": 10,
+      "lat": 25.7617,
+      "lng": -80.1918,
+      "location": "Miami, FL",
+      "description": "Category 5 hurricane making landfall",
+      "radius": 15000,
+      "timestamp": "2025-10-21T10:00:00Z"
     }
   ],
   "safeZones": [
@@ -84,6 +117,96 @@
       "capacity": 800,
       "available": 500,
       "address": "555 Emergency Ln, Chicago"
+    },
+    {
+      "id": 6,
+      "name": "California Hospital Medical Center",
+      "type": "hospital",
+      "lat": 34.0420,
+      "lng": -118.2595,
+      "capacity": 600,
+      "available": 200,
+      "address": "1401 S Grand Ave, Los Angeles, CA"
+    },
+    {
+        "id": 7,
+        "name": "Oklahoma University Medical Center",
+        "type": "hospital",
+        "lat": 35.4823,
+        "lng": -97.5221,
+        "capacity": 700,
+        "available": 300,
+        "address": "700 NE 13th St, Oklahoma City, OK"
+    },
+    {
+      "id": 8,
+      "name": "Miami-Dade County Emergency Shelter",
+      "type": "shelter",
+      "lat": 25.7743,
+      "lng": -80.1937,
+      "capacity": 2000,
+      "available": 1500,
+      "address": "123 Main St, Miami, FL"
+    },
+    {
+      "id": 9,
+      "name": "Jackson Memorial Hospital",
+      "type": "hospital",
+      "lat": 25.7788,
+      "lng": -80.2122,
+      "capacity": 1500,
+      "available": 500,
+      "address": "1611 NW 12th Ave, Miami, FL"
+    },
+    {
+      "id": 10,
+      "name": "Los Angeles Convention Center Shelter",
+      "type": "shelter",
+      "lat": 34.0403,
+      "lng": -118.2696,
+      "capacity": 5000,
+      "available": 3000,
+      "address": "1201 S Figueroa St, Los Angeles, CA"
+    },
+    {
+      "id": 11,
+      "name": "Northwestern Memorial Hospital",
+      "type": "hospital",
+      "lat": 41.8950,
+      "lng": -87.6178,
+      "capacity": 894,
+      "available": 400,
+      "address": "251 E Huron St, Chicago, IL"
+    },
+    {
+      "id": 12,
+      "name": "Monrovia Community Center",
+      "type": "shelter",
+      "lat": 34.1489,
+      "lng": -118.0031,
+      "capacity": 500,
+      "available": 300,
+      "address": "119 W Palm Ave, Monrovia, CA"
+    },
+    {
+      "id": 13,
+      "name": "Methodist Hospital of Southern California",
+      "type": "hospital",
+      "lat": 34.1397,
+      "lng": -118.0423,
+      "capacity": 348,
+      "available": 150,
+      "address": "300 W Huntington Dr, Arcadia, CA"
+    },
+    {
+      "id": 14,
+      "name": "Moore Community Center",
+      "type": "shelter",
+      "lat": 35.2333,
+      "lng": -97.4867,
+      "capacity": 1000,
+      "available": 700,
+      "address": "301 S Howard Ave, Moore, OK"
     }
   ]
 }

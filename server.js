@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 
 app.use(cors());
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/disasters', async (req, res) => {
     try {
-      
+        res.setHeader('Cache-Control', 'no-cache');
         const sampleData = require('./data/sample-data.json');
         res.json(sampleData);
     } catch (error) {

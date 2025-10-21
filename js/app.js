@@ -47,6 +47,10 @@ const App = {
     UI.displaySafeZones(safeZones);
     UI.displayStats(disasters, safeZones);
     UI.displayFilters(disasters);
+
+    const disasterTypes = [...new Set(disasters.map(d => d.type))];
+    const safeZoneTypes = [...new Set(safeZones.map(z => z.type))];
+    UI.displayLegend(disasterTypes, safeZoneTypes);
   },
 
   /**

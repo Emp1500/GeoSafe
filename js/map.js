@@ -6,6 +6,14 @@ const MapHandler = {
     safeZones: [],
     userLocation: null
   },
+  disasterTypeColors: {
+    earthquake: '#ff7f00',
+    fire: '#e41a1c',
+    flood: '#377eb8',
+    hurricane: '#984ea3',
+    tornado: '#ffff33',
+    other: '#a65628'
+  },
 
   /**
    * Initialize the map
@@ -23,6 +31,11 @@ const MapHandler = {
 
     // Get user location
     this.getUserLocation();
+
+    // Add legend
+    this.addLegend();
+
+    return this.map;
   },
 
   /**
@@ -73,12 +86,16 @@ const MapHandler = {
     // Clear existing disaster markers
     this.markers.disasters.forEach(marker => {
       this.map.removeLayer(marker.marker);
+      if (marker.circle) {
+        this.map.removeLayer(marker.circle);
+      }
     });
     this.markers.disasters = [];
 
     disasters.forEach(disaster => {
+      const color = this.getDisasterColor(disaster.type);
       const icon = L.divIcon({
-        html: `<div class="marker-disaster marker-${disaster.type}"></div>`,
+        html: `<div class="marker-disaster" style="background-color: ${color};"></div>`,
         iconSize: [28, 28],
         className: 'disaster-marker-wrapper'
       });
@@ -95,16 +112,15 @@ const MapHandler = {
           </div>
         `);
 
-      // Add danger radius circle
-      L.circle([disaster.lat, disaster.lng], {
-        color: this.getDisasterColor(disaster.type),
-        fillColor: this.getDisasterColor(disaster.type),
+      const circle = L.circle([disaster.lat, disaster.lng], {
+        color: color,
+        fillColor: color,
         fillOpacity: 0.15,
         radius: disaster.radius,
         weight: 2
       }).addTo(this.map);
 
-      this.markers.disasters.push({ marker, disaster });
+      this.markers.disasters.push({ marker, circle, disaster });
     });
   },
 
@@ -119,8 +135,9 @@ const MapHandler = {
     this.markers.safeZones = [];
 
     safeZones.forEach(zone => {
+      const color = this.getSafeZoneColor(zone.type);
       const icon = L.divIcon({
-        html: `<div class="marker-safe marker-${zone.type}"></div>`,
+        html: `<div class="marker-safe" style="background-color: ${color};"></div>`,
         iconSize: [26, 26],
         className: 'safe-marker-wrapper'
       });
@@ -142,19 +159,27 @@ const MapHandler = {
   },
 
   /**
-   * Get color based on disaster type
+   * Get color for disaster types
    */
   getDisasterColor(type) {
-    const colors = {
-      earthquake: '#ff4444',
-      flood: '#0066ff',
-      thunderstorm: '#ffaa00',
-      tornado: '#660000',
-      wildfire: '#ff6600',
-      tsunami: '#0099ff',
-      hurricane: '#9933ff'
-    };
-    return colors[type.toLowerCase()] || '#ff0000';
+    return this.disasterTypeColors[type.toLowerCase()] || this.disasterTypeColors.other;
+  },
+
+  /**
+   * Get color for safe zones
+   */
+  getSafeZoneColor(type) {
+    if (type.toLowerCase() === 'hospital') {
+      return '#0000ff'; // Blue for hospitals
+    }
+    return '#00ff00'; // Green for other safe zones
+  },
+
+  /**
+   * Add legend to the map
+   */
+  addLegend() {
+    // This function is now handled by UI.js
   },
 
   /**
@@ -175,12 +200,18 @@ const MapHandler = {
   },
 
   /**
-   * Filter markers by type
+   * Filter markers by type and severity
    */
-  filterByType(type) {
+  filterMarkers(typeFilter, severityFilter) {
     this.markers.disasters.forEach(item => {
-      const isVisible = item.disaster.type.toLowerCase() === type.toLowerCase() || type === 'all';
-      item.marker.setOpacity(isVisible ? 1 : 0.3);
+      const typeMatch = typeFilter === 'all' || item.disaster.type === typeFilter;
+      const severityMatch = item.disaster.severity >= severityFilter;
+      const isVisible = typeMatch && severityMatch;
+
+      item.marker.setOpacity(isVisible ? 1 : 0.2);
+      if (item.circle) {
+        item.circle.setStyle({ opacity: isVisible ? 0.5 : 0, fillOpacity: isVisible ? 0.1 : 0 });
+      }
     });
   },
 
